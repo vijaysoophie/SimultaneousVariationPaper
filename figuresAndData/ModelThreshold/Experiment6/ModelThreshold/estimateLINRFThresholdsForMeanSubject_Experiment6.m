@@ -84,7 +84,7 @@ for iterSurroundValue = 1:length(surroundValue)
                 else
                     
                     % Load the images to be analyzed
-                    pathToStimulus = fullfile('/Users/vijaysingh/Documents/EquivalentNoisePaper/Experiment6/LMSImages',LMS_file_name{iterCovariance});
+                    pathToStimulus = fullfile('/Experiment6/LMSImages',LMS_file_name{iterCovariance});
                     stimulusFile = load(pathToStimulus);
                     
                     if (iterCovariance <7)
