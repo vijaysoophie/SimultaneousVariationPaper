@@ -38,9 +38,8 @@ internalNoiseLINRF = noiseInLINRFGaussian(2,:)./valueOfCPrime(2,:);
 % External Noise
 for ii = 1:size(valueOfSurround,2)
     surroundValueTemp = valueOfSurround(2,ii);
-    curve = estimateVarianceOfStimuliImages(surroundValueTemp);
-    cPrimeTemp = valueOfCPrime(2,ii);
-    externalNoiseLINRF(1,ii) = sqrt(curve(1)/(cPrimeTemp.^2));
+    curve = estimateVarianceOfStimuliImages(surroundValueTemp, valueOfCPrime(2,ii));
+    externalNoiseLINRF(1,ii) = sqrt(curve(1));
 end
 
 %%
