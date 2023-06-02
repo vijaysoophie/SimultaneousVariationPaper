@@ -68,5 +68,5 @@ p_value_BKG = anova1(ThresholdMeanSubject(:,[4 6]));
 p_value_SIM = anova1(ThresholdMeanSubject(:,[5 7]));
 
 %% Compare Simultaneous threshold with Sum of thresholds
-p_value_sum_chrom = anova1([ThresholdMeanSubject(:,4) + ThresholdMeanSubject(:,3) - 2*ThresholdMeanSubject(:,2) ThresholdMeanSubject(:,5)- ThresholdMeanSubject(:,2)]);
-p_value_sum_achrom = anova1([ThresholdMeanSubject(:,6) + ThresholdMeanSubject(:,3)- 2*ThresholdMeanSubject(:,2) ThresholdMeanSubject(:,7)- ThresholdMeanSubject(:,2)]);
+p_value_sum_chrom = anova1([ThresholdMeanSubject(:,4).^2 + ThresholdMeanSubject(:,3).^2 - 2*ThresholdMeanSubject(:,2).^2 ThresholdMeanSubject(:,5).^2- ThresholdMeanSubject(:,2).^2]);
+p_value_sum_achrom = anova1([ThresholdMeanSubject(:,6).^2 + ThresholdMeanSubject(:,3).^2 - 2*ThresholdMeanSubject(:,2).^2 ThresholdMeanSubject(:,7).^2- ThresholdMeanSubject(:,2).^2]);
