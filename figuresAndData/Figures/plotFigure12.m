@@ -33,8 +33,8 @@ ThresholdMeanSubject = [ThresholdSubject0003; ThresholdSubjectBagel; ...
     ThresholdSubjectFun; ThresholdSubjectOven; ...
     ThresholdSubjectManos; ThresholdSubjectRevival];
 
-MeanThreshold = mean(((ThresholdMeanSubject)));
-StdThreshold = std(((ThresholdMeanSubject)));
+MeanThresholdSquared = mean(((ThresholdMeanSubject.^2)));
+StdThresholdSquared = std(((ThresholdMeanSubject.^2)));
 
 %% Plot thresholds
 fig = figure;
@@ -55,36 +55,36 @@ grayIndex   = [6 7];
 xGrayValue  = [2.1 5.1];
 
 % Plot no variation baseline
-plot([0 6], MeanThreshold(2)*[1 1], 'b:', 'LineWidth', 2);
+plot([0 6], MeanThresholdSquared(2)*[1 1], 'b:', 'LineWidth', 2);
 
 % Plot background variation above baseline
-plot([1.9 1.9], [MeanThreshold(2) MeanThreshold(4)], 'color', [1 0.3 0.3], 'LineWidth', 20);
-plot([2.1 2.1], [MeanThreshold(2) MeanThreshold(6)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
+plot([1.9 1.9], [MeanThresholdSquared(2) MeanThresholdSquared(4)], 'color', [1 0.3 0.3], 'LineWidth', 20);
+plot([2.1 2.1], [MeanThresholdSquared(2) MeanThresholdSquared(6)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
 
 
 % Plot light variation above baseline
-plot([3 3], [MeanThreshold(2) MeanThreshold(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
+plot([3 3], [MeanThresholdSquared(2) MeanThresholdSquared(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
 
 % Plot sum of individual variation above baseline
-plot([3.9 3.9], [MeanThreshold(2) MeanThreshold(4)+MeanThreshold(3)-MeanThreshold(2)], 'color', [1 0.3 0.3], 'LineWidth', 20);
-plot([4.9 4.9], [MeanThreshold(2) MeanThreshold(6)+MeanThreshold(3)-MeanThreshold(2)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
+plot([3.9 3.9], [MeanThresholdSquared(2) MeanThresholdSquared(4)+MeanThresholdSquared(3)-MeanThresholdSquared(2)], 'color', [1 0.3 0.3], 'LineWidth', 20);
+plot([4.9 4.9], [MeanThresholdSquared(2) MeanThresholdSquared(6)+MeanThresholdSquared(3)-MeanThresholdSquared(2)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
 
 % Show the part that corresponds to light variation
-plot([3.9 3.9], [MeanThreshold(2) MeanThreshold(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
-plot([4.9 4.9], [MeanThreshold(2) MeanThreshold(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
+plot([3.9 3.9], [MeanThresholdSquared(2) MeanThresholdSquared(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
+plot([4.9 4.9], [MeanThresholdSquared(2) MeanThresholdSquared(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
 
 % Show the combined variation
-bColor = plot([4.1 4.1], [MeanThreshold(2) MeanThreshold(5)], 'color', [1 0.3 0.3], 'LineWidth', 20);
-bGray = plot([5.1 5.1], [MeanThreshold(2) MeanThreshold(7)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
+bColor = plot([4.1 4.1], [MeanThresholdSquared(2) MeanThresholdSquared(5)], 'color', [1 0.3 0.3], 'LineWidth', 20);
+bGray = plot([5.1 5.1], [MeanThresholdSquared(2) MeanThresholdSquared(7)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
 
 
 % Show the error bars
-errorbar(xColorValue, mean(((ThresholdMeanSubject(:,colorIndex)))), std((ThresholdMeanSubject(:,colorIndex)))/sqrt(size(ThresholdMeanSubject,1)),'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
-errorbar(xGrayValue, mean(((ThresholdMeanSubject(:,grayIndex)))), std((ThresholdMeanSubject(:,grayIndex)))/sqrt(size(ThresholdMeanSubject,1)),'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
+errorbar(xColorValue, mean(((ThresholdMeanSubject(:,colorIndex)).^2)), std((ThresholdMeanSubject(:,colorIndex)).^2)/sqrt(size(ThresholdMeanSubject,1)),'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
+errorbar(xGrayValue, mean(((ThresholdMeanSubject(:,grayIndex)).^2)), std((ThresholdMeanSubject(:,grayIndex)).^2)/sqrt(size(ThresholdMeanSubject,1)),'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
 
-errorbar([3.9 4.9], [MeanThreshold(4)+MeanThreshold(3)-MeanThreshold(2) ...
-    MeanThreshold(6)+MeanThreshold(3)-MeanThreshold(2)], ...
-    [sqrt(sum(StdThreshold([2 3 4]).^2)/18) sqrt(sum(StdThreshold([2 3 6]).^2)/18)], ...
+errorbar([3.9 4.9], [MeanThresholdSquared(4)+MeanThresholdSquared(3)-MeanThresholdSquared(2) ...
+    MeanThresholdSquared(6)+MeanThresholdSquared(3)-MeanThresholdSquared(2)], ...
+    [sqrt(sum(StdThresholdSquared([2 3 4]).^2)/18) sqrt(sum(StdThresholdSquared([2 3 6]).^2)/18)], ...
     'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
 
 %%
@@ -97,7 +97,7 @@ hold on; box on;
 legend([bColor bGray],lFitLabel,'interpreter','latex','location','northwest');
 set(gca, 'Fontsize',20);
 xlabel('Type of Variation');
-ylabel('$\left<T\right> \pm \rm{SEM} $ ', 'interpreter', 'latex');
+ylabel('$\left<T^2\right> \pm \rm{SEM} $ ', 'interpreter', 'latex');
 xlim([0.6 5.5]);
 % ylim([-3.2 -2.1]);
 xticks([1:5]);
