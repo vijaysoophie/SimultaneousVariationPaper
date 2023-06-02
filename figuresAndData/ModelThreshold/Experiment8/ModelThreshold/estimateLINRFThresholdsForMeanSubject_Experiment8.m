@@ -16,8 +16,8 @@
 clear; close all;
 
 % Set parameters that controls scale of additive noise variance.
-decisionSigma = 19118;  
-surroundValue = -0.1006;
+decisionSigma = 1.8981e+04;  
+surroundValue = -0.2057;
 
 % Average the full calculation 10 times
 nAverage = 10;
