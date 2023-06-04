@@ -71,7 +71,7 @@ for rowSubplot = 1:6
                 case 2
                     text(0.19, 0.5, 'Observer Bagel', 'Fontsize', 20);
                 case 3
-                    text(0.19, 0.5, 'Observer Fun', 'Fontsize', 20);
+                    text(0.19, 0.5, 'Observer Content', 'Fontsize', 20);
                 case 4
                     text(0.19, 0.5, 'Observer Oven', 'Fontsize', 20);
                 case 5
