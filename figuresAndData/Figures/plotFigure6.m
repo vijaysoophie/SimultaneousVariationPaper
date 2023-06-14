@@ -31,46 +31,46 @@ for subjectNumber = 1:6
         % Subplot Title
             switch covNumber
                 case 1
-                    subplot(2, 6, 7);
+                    subplot(2, 6, 1);
                     hold on; box on;
                     ylabel('Proportion Chosen', 'Fontsize', 10);
                     title('\sigma^2 = 0.00 Selection', 'Fontsize', 10);
                 case 2
-                    subplot(2, 6, 1);
+                    subplot(2, 6, 7);
                     hold on; box on;
                     ylabel('Proportion Chosen', 'Fontsize', 10);
                     title('\sigma^2 = 0.00', 'Fontsize', 10);
-                    text(0.24, 0.5, ['Observer:', newline, subjectNames{subjectNumber}], 'Fontsize', 20);    
+                    text(0.24, 1.5, ['Observer:', newline, subjectNames{subjectNumber}], 'Fontsize', 20);    
                 case 3
-                    subplot(2, 6, 2);
+                    subplot(2, 6, 8);
                     hold on; box on;
                     title('\sigma^2 = 0.01', 'Fontsize', 10);
                 case 4
-                    subplot(2, 6, 3);
+                    subplot(2, 6, 9);
                     hold on; box on;
                     title('\sigma^2 = 0.03', 'Fontsize', 10);
                 case 5
-                    subplot(2, 6, 9);
+                    subplot(2, 6, 3);
                     hold on; box on;
                     title('\sigma^2 = 0.03 Achromatic', 'Fontsize', 10);
                 case 6
-                     subplot(2, 6, 4);
+                     subplot(2, 6, 10);
                     hold on; box on;
                    title('\sigma^2 = 0.10', 'Fontsize', 10);
                 case 7
-                    subplot(2, 6, 5);
+                    subplot(2, 6, 11);
                     hold on; box on;
                     title('\sigma^2 = 0.30', 'Fontsize', 10);
                 case 8
-                    subplot(2, 6, 11);
+                    subplot(2, 6, 5);
                     hold on; box on;
                     title('\sigma^2 = 0.30 Achromatic', 'Fontsize', 10);
                 case 9
-                    subplot(2, 6, 6);
+                    subplot(2, 6, 12);
                     hold on; box on;
                     title('\sigma^2 = 1.00', 'Fontsize', 10);
                 case 10
-                    subplot(2, 6, 12);
+                    subplot(2, 6, 6);
                     hold on; box on;
                     title('\sigma^2 = 1.00 Achromatic', 'Fontsize', 10);
             end
