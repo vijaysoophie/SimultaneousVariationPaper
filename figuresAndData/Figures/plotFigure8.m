@@ -17,11 +17,11 @@ NConditions = 8;
 NAcquisition = 3;
 %% Plot Figure
 hFig = figure();
-set(hFig,'units','pixels', 'Position', [100 100 1600 160]);
+set(hFig,'units','pixels', 'Position', [100 100 1000 400]);
 
 for rowSubplot = 1
     for colSubplot = 1:NConditions
-        subplot(1, NConditions, (rowSubplot - 1)*NConditions + colSubplot)
+        subplot(2, NConditions/2, (rowSubplot - 1)*NConditions + colSubplot)
         hold on; box on;
         %% Plot a vertical line indicating the standard
         lStdY = plot([LRFLevels(6) LRFLevels(6)], yLimits,':r','LineWidth', 1);
@@ -58,44 +58,44 @@ for rowSubplot = 1
         if (colSubplot == 1)
             switch rowSubplot
                 case 1
-                    text(0.18, 0.5, 'Observer 0003', 'Fontsize', 20);
+                    text(0.29, -1.0, 'Observer: 0003', 'Fontsize', 20, 'rotation', 90);
             end
         end        
         
         % Subplot x-Label
-        if (rowSubplot == 1)
+        if (colSubplot > 4)
             xlabel('Comparison LRF', 'Fontsize', 10);
         end
         
         % Subplot y-Label
-        if (colSubplot == 1)
+        if (colSubplot == 1 || colSubplot == 5)
             ylabel('Proportion Chosen', 'Fontsize', 10);
         end
 
         % Subplot legend
-        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),3), ...
-            num2str(threshPal(indexToplot(2)),3), num2str(threshPal(indexToplot(3)),3)},...
-            'Location','Southeast','FontSize',6);
+        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
+            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
+            'Location','Southeast','FontSize',10);
         
         % Subplot Title
         if (rowSubplot == 1)
             switch colSubplot
                 case 1
-                    title('\Delta = 0.00 Selection', 'Fontsize', 10);
+                    title('\delta = 0.00 Practice', 'Fontsize', 10);
                 case 2
-                    title('\Delta = 0.00', 'Fontsize', 10);
+                    title('\delta = 0.00', 'Fontsize', 10);
                 case 3
-                    title('\Delta = 0.05', 'Fontsize', 10);
+                    title('\delta = 0.05', 'Fontsize', 10);
                 case 4
-                    title('\Delta = 0.10', 'Fontsize', 10);
+                    title('\delta = 0.10', 'Fontsize', 10);
                 case 5
-                    title('\Delta = 0.15', 'Fontsize', 10);
+                    title('\delta = 0.15', 'Fontsize', 10);
                 case 6
-                    title('\Delta = 0.20', 'Fontsize', 10);
+                    title('\delta = 0.20', 'Fontsize', 10);
                 case 7
-                    title('\Delta = 0.25', 'Fontsize', 10);
+                    title('\delta = 0.25', 'Fontsize', 10);
                 case 8
-                    title('\Delta = 0.30', 'Fontsize', 10);
+                    title('\delta = 0.30', 'Fontsize', 10);
             end
         end
         

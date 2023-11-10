@@ -14,7 +14,7 @@ clear; close all;
 makeDataForFigure10;
 
 conditionOrder = [1 2 4 6 3 5 7];
-conditionName = {'No Variation \newline   Selection';... % Condition Order 1
+conditionName = {'No Variation \newline   Practice';... % Condition Order 1
              'No Variation';                     ... % Condition Order 2
              'Backgroung Variation \newline          Chromatic';... % Condition Order 6
              'Backgroung Variation \newline         Achromatic';... % Condition Order 5
@@ -22,15 +22,17 @@ conditionName = {'No Variation \newline   Selection';... % Condition Order 1
              'Simultaneous Variation \newline         Chromatic';... % Condition Order 3
              'Simultaneous Variation \newline        Achromatic'};   % Condition Order 7}
 
+subplotNumber = [1, 5, 6, 2, 7, 8, 4];
+         
 NConditions = 7;
 NAcquisition = 3;
 %% Plot Figure
 hFig = figure();
-set(hFig,'units','pixels', 'Position', [100 100 1600 160]);
+set(hFig,'units','pixels', 'Position', [100 100 1000 400]);
 
 for rowSubplot = 1
     for colSubplot = 1:NConditions
-        subplot(1, NConditions, (rowSubplot - 1)*NConditions + colSubplot)
+        subplot(2, 4, subplotNumber(colSubplot))
         hold on; box on;
         %% Plot a vertical line indicating the standard
         lStdY = plot([LRFLevels(6) LRFLevels(6)], yLimits,':r','LineWidth', 1);
@@ -67,24 +69,24 @@ for rowSubplot = 1
         if (colSubplot == 1)
             switch rowSubplot
                 case 1
-                    text(0.20, 0.5, 'Observer 0003', 'Fontsize', 20);
+                    text(0.29, -1, 'Observer: 0003', 'Fontsize', 20, 'rotation', 90);
             end
         end        
         
         % Subplot x-Label
-        if (rowSubplot == 1)
+        if (colSubplot == 2 || colSubplot == 3 || colSubplot == 5 || colSubplot == 6)
             xlabel('Comparison LRF', 'Fontsize', 10);
         end
         
         % Subplot y-Label
-        if (colSubplot == 1)
+        if (colSubplot == 1 || colSubplot == 2)
             ylabel('Proportion Chosen', 'Fontsize', 10);
         end
 
         % Subplot legend
-        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),3), ...
-            num2str(threshPal(indexToplot(2)),3), num2str(threshPal(indexToplot(3)),3)},...
-            'Location','Southeast','FontSize',6);
+        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
+            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
+            'Location','Southeast','FontSize',10);
         
         % Subplot Title
         if (rowSubplot == 1)

@@ -83,29 +83,29 @@ for rowSubplot = 1:6
         end
 
         % Subplot legend
-        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),3), ...
-            num2str(threshPal(indexToplot(2)),3), num2str(threshPal(indexToplot(3)),3)},...
+        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
+            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
             'Location','Southeast','FontSize',6);
         
         % Subplot Title
         if (rowSubplot == 1)
             switch colSubplot
                 case 1
-                    title('\Delta = 0.00 Selection', 'Fontsize', 10);
+                    title('\delta = 0.00 Practice', 'Fontsize', 10);
                 case 2
-                    title('\Delta = 0.00', 'Fontsize', 10);
+                    title('\delta = 0.00', 'Fontsize', 10);
                 case 3
-                    title('\Delta = 0.05', 'Fontsize', 10);
+                    title('\delta = 0.05', 'Fontsize', 10);
                 case 4
-                    title('\Delta = 0.10', 'Fontsize', 10);
+                    title('\delta = 0.10', 'Fontsize', 10);
                 case 5
-                    title('\Delta = 0.15', 'Fontsize', 10);
+                    title('\delta = 0.15', 'Fontsize', 10);
                 case 6
-                    title('\Delta = 0.20', 'Fontsize', 10);
+                    title('\delta = 0.20', 'Fontsize', 10);
                 case 7
-                    title('\Delta = 0.25', 'Fontsize', 10);
+                    title('\delta = 0.25', 'Fontsize', 10);
                 case 8
-                    title('\Delta = 0.30', 'Fontsize', 10);
+                    title('\delta = 0.30', 'Fontsize', 10);
             end
         end
         

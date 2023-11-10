@@ -34,13 +34,13 @@ for subjectNumber = 1:6
                     subplot(2, 6, 1);
                     hold on; box on;
                     ylabel('Proportion Chosen', 'Fontsize', 10);
-                    title('\sigma^2 = 0.00 Selection', 'Fontsize', 10);
+                    title('\sigma^2 = 0.00 Practice', 'Fontsize', 10);
+                    text(0.29, -1, ['Observer: ', subjectNames{subjectNumber}], 'Fontsize', 20, 'rotation', 90);    
                 case 2
                     subplot(2, 6, 7);
                     hold on; box on;
                     ylabel('Proportion Chosen', 'Fontsize', 10);
-                    title('\sigma^2 = 0.00', 'Fontsize', 10);
-                    text(0.24, 1.5, ['Observer:', newline, subjectNames{subjectNumber}], 'Fontsize', 20);    
+                    title('\sigma^2 = 0.00', 'Fontsize', 10);                    
                 case 3
                     subplot(2, 6, 8);
                     hold on; box on;
@@ -103,9 +103,9 @@ for subjectNumber = 1:6
         xlabel('Comparison LRF', 'Fontsize', 10);
                 
         % Subplot legend
-        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),3), ...
-            num2str(threshPal(indexToplot(2)),3), num2str(threshPal(indexToplot(3)),3)},...
-            'Location','Southeast','FontSize',6);
+        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
+            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
+            'Location','Southeast','FontSize',10);
         
     end
     if subjectNumber == 1

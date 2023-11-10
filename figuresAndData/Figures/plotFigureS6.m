@@ -14,7 +14,7 @@ clear; close all;
 makeDataForFigure10;
 
 conditionOrder = [1 2 4 6 3 5 7];
-conditionName = {'No Variation \newline   Selection';... % Condition Order 1
+conditionName = {'No Variation \newline   Practice';... % Condition Order 1
              'No Variation';                     ... % Condition Order 2
              'Backgroung Variation \newline          Chromatic';... % Condition Order 6
              'Backgroung Variation \newline         Achromatic';... % Condition Order 5
@@ -92,8 +92,8 @@ for rowSubplot = 1:6
         end
 
         % Subplot legend
-        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),3), ...
-            num2str(threshPal(indexToplot(2)),3), num2str(threshPal(indexToplot(3)),3)},...
+        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
+            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
             'Location','Southeast','FontSize',6);
         
         % Subplot Title
