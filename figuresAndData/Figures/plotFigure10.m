@@ -1,4 +1,4 @@
-% This script plots figure 10 (psychometric function) for Experiment 8.
+% This script plots figure 8 (psychometric function) for Experiment 7.
 % The script requires Palamedes_1.9.0 toolbox. 
 %
 % The figure is saved in the folder 
@@ -6,25 +6,14 @@
 %
 % Aug 14 2021: Vijay Singh wrote this.
 % Aug 15 2021: Vijay Singh modified this to change names.
-% Apr 27 2023: Vijay Singh modified this from equivalnet noise paper script.
-% May 17 2023: Vijay Singh modified this added Simultaneous Constancy paper folder.
+% Apr 27 2023: Vijay Singh modified this from equivalent noise paper script.
+% May 17 2023: Vijay Singh moved this to Simultaneous Constancy folder.
 %
 %%
 clear; close all;
 makeDataForFigure10;
 
-conditionOrder = [1 2 4 6 3 5 7];
-conditionName = {'No Variation \newline   Practice';... % Condition Order 1
-             'No Variation';                     ... % Condition Order 2
-             'Backgroung Variation \newline          Chromatic';... % Condition Order 6
-             'Backgroung Variation \newline         Achromatic';... % Condition Order 5
-             'Light Intensity \newline    Variation';... % Condition Order 4
-             'Simultaneous Variation \newline         Chromatic';... % Condition Order 3
-             'Simultaneous Variation \newline        Achromatic'};   % Condition Order 7}
-
-subplotNumber = [1, 5, 6, 2, 7, 8, 4];
-         
-NConditions = 7;
+NConditions = 8;
 NAcquisition = 3;
 %% Plot Figure
 hFig = figure();
@@ -32,12 +21,12 @@ set(hFig,'units','pixels', 'Position', [100 100 1000 400]);
 
 for rowSubplot = 1
     for colSubplot = 1:NConditions
-        subplot(2, 4, subplotNumber(colSubplot))
+        subplot(2, NConditions/2, (rowSubplot - 1)*NConditions + colSubplot)
         hold on; box on;
         %% Plot a vertical line indicating the standard
         lStdY = plot([LRFLevels(6) LRFLevels(6)], yLimits,':r','LineWidth', 1);
 
-        covNumber = conditionOrder(colSubplot);
+        covNumber = colSubplot;
         subjectNumber = rowSubplot;
         for iterAcquisition = 1:NAcquisition
             acquisitionNumber = iterAcquisition;
@@ -69,17 +58,17 @@ for rowSubplot = 1
         if (colSubplot == 1)
             switch rowSubplot
                 case 1
-                    text(0.29, -1, 'Observer: 0003', 'Fontsize', 20, 'rotation', 90);
+                    text(0.29, -1.0, 'Observer: 0003', 'Fontsize', 20, 'rotation', 90);
             end
         end        
         
         % Subplot x-Label
-        if (colSubplot == 2 || colSubplot == 3 || colSubplot == 5 || colSubplot == 6)
+        if (colSubplot > 4)
             xlabel('Comparison LRF', 'Fontsize', 10);
         end
         
         % Subplot y-Label
-        if (colSubplot == 1 || colSubplot == 2)
+        if (colSubplot == 1 || colSubplot == 5)
             ylabel('Proportion Chosen', 'Fontsize', 10);
         end
 
@@ -92,25 +81,26 @@ for rowSubplot = 1
         if (rowSubplot == 1)
             switch colSubplot
                 case 1
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.00 Practice', 'Fontsize', 10);
                 case 2
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.00', 'Fontsize', 10);
                 case 3
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.05', 'Fontsize', 10);
                 case 4
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.10', 'Fontsize', 10);
                 case 5
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.15', 'Fontsize', 10);
                 case 6
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.20', 'Fontsize', 10);
                 case 7
-                    title(conditionName(colSubplot), 'Fontsize', 10);
+                    title('\delta = 0.25', 'Fontsize', 10);
+                case 8
+                    title('\delta = 0.30', 'Fontsize', 10);
             end
         end
         
     end
 end
 
-
-save2pdf('Figure10.pdf',gcf,600);
-close;
+% save2pdf('Figure10.pdf',gcf,600);
+% close;

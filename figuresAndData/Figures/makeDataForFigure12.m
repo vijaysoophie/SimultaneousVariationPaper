@@ -6,7 +6,7 @@
 %%
 clear; close all;
 %% Load .csv file
-dataFile = importfileForFigure2('../ObserverData/Experiment6/proportionComparisonChosen.csv');
+dataFile = importfileForFigure12('../ObserverData/Experiment8/proportionComparisonChosen.csv');
 data = table2array(dataFile);
 
 thresholdU = 0.7604;
@@ -44,7 +44,7 @@ yy = zeros(1000, 73);
 psePal = zeros(1, 73);
 threshPal = zeros(1, 73);
 
-for ii = 2:181
+for ii = 2:127
 %% Get data for this subplot
 
 proportionCorrect = data(2:end,ii);

@@ -1,117 +1,67 @@
-% This script plots figure 4 (psychometric function) for Experiment 6.
-% The script requires Palamedes_1.9.0 toolbox.
+% This script plots Figure 6 the spectra of illumination spectra, their 
+% CIE xy chromaticity, and their sRGB renderings.
 %
-% The figure is saved in the folder
-% LightnessConstancy/AnalyzeExperiment6/Figures as Figure4.pdf.
 %
-% Aug 14 2021: Vijay Singh wrote this.
-% Aug 15 2021: Vijay Singh modified this to change names.
-% Apr 27 2023: Vijay Singh modified this from equivalnet noise paper script.
+% Unknown date: Vijay Singh wrote this.
+% April 12 2024: Vijay Singh modified this to write comments.
 %
 %%
-clear; close all;
-makeDataForFigure6;
 
-NConditions = 10;
-NAcquisition = 3;
+clear;
+% Load presimulate data. This data can be generated using the function 
+% generateIlluminant_xyY_data.m. The function requires some functions and
+% datasets from the virtualworldcolorconstancy repository.
 
-subjectNames = {'0003', 'bagel', 'committee', 'content', 'observer', 'revival'};
+load('Illuminant_data.mat');
 
-for subjectNumber = 1:6
-    %% Plot Figure
-    hFig = figure();
-    set(hFig,'units','pixels', 'Position', [100 100 1600 400]);
-    for covNumber = 1:NConditions
-        for iterAcquisition = 1:NAcquisition
-            acquisitionNumber = iterAcquisition;
-            indexToplot(iterAcquisition) = (subjectNumber-1)*NConditions*NAcquisition + (covNumber - 1)*NAcquisition + acquisitionNumber + 1;
-        end
-        
-        %%
-        % Subplot Title
-            switch covNumber
-                case 1
-                    subplot(2, 6, 1);
-                    hold on; box on;
-                    ylabel('Proportion Chosen', 'Fontsize', 10);
-                    title('\sigma^2 = 0.00 Practice', 'Fontsize', 10);
-                    text(0.29, -1, ['Observer: ', subjectNames{subjectNumber}], 'Fontsize', 20, 'rotation', 90);    
-                case 2
-                    subplot(2, 6, 7);
-                    hold on; box on;
-                    ylabel('Proportion Chosen', 'Fontsize', 10);
-                    title('\sigma^2 = 0.00', 'Fontsize', 10);                    
-                case 3
-                    subplot(2, 6, 8);
-                    hold on; box on;
-                    title('\sigma^2 = 0.01', 'Fontsize', 10);
-                case 4
-                    subplot(2, 6, 9);
-                    hold on; box on;
-                    title('\sigma^2 = 0.03', 'Fontsize', 10);
-                case 5
-                    subplot(2, 6, 3);
-                    hold on; box on;
-                    title('\sigma^2 = 0.03 Achromatic', 'Fontsize', 10);
-                case 6
-                     subplot(2, 6, 10);
-                    hold on; box on;
-                   title('\sigma^2 = 0.10', 'Fontsize', 10);
-                case 7
-                    subplot(2, 6, 11);
-                    hold on; box on;
-                    title('\sigma^2 = 0.30', 'Fontsize', 10);
-                case 8
-                    subplot(2, 6, 5);
-                    hold on; box on;
-                    title('\sigma^2 = 0.30 Achromatic', 'Fontsize', 10);
-                case 9
-                    subplot(2, 6, 12);
-                    hold on; box on;
-                    title('\sigma^2 = 1.00', 'Fontsize', 10);
-                case 10
-                    subplot(2, 6, 6);
-                    hold on; box on;
-                    title('\sigma^2 = 1.00 Achromatic', 'Fontsize', 10);
-            end
+%%
+fig=figure;
+set(fig,'Position', [100, 100, 600, 1400]);
+FS = 10;
+FSTitle = 10;
 
-        
-        
-        %% Plot Data
-        % Plot a vertical line indicating the standard
-        lStdY = plot([LRFLevels(6) LRFLevels(6)], yLimits,':r','LineWidth', 1);
-        
-        % Plot proportion comparison
-        lData1 = plot(LRFLevels,data(2:end,indexToplot(1))./totalTrial,'r.','MarkerSize',10);
-        lData2 = plot(LRFLevels,data(2:end,indexToplot(2))./totalTrial,'gs','MarkerSize',5, 'MarkerFaceColor', 'g');
-        lData3 = plot(LRFLevels,data(2:end,indexToplot(3))./totalTrial,'b*','MarkerSize',5);
-        
-        % Plot Fit Line
-        lTh1 = plot(xx, yy(:, indexToplot(1)),'r', 'LineWidth', 1);
-        lTh2 = plot(xx, yy(:, indexToplot(2)),'g', 'LineWidth', 1);
-        lTh3 = plot(xx, yy(:, indexToplot(3)),'b', 'LineWidth', 1);
-        
-        %% Make Figure Pretty
-        % Set Limits
-        xlim(xLimits);
-        ylim(yLimits);
-        xticks(LRFLevels);
-        hAxis = gca;
-        set(hAxis,'FontSize',10);
-        hAxis.XTickLabelRotation = 90;
-        
-        xlabel('Comparison LRF', 'Fontsize', 10);
-                
-        % Subplot legend
-        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
-            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
-            'Location','Southeast','FontSize',10);
-        
+%% Plot figures
+for iterScale = 1:7
+    newIlluminance = squeeze(illuminant_data(iterScale, :,:));
+    IlluminantxyY = squeeze(chromaticity_data(iterScale, :,:));
+    theIlluminationImage = squeeze(illuminantColor_data(iterScale, :,:,:));
+    FS = 10;
+    FSTitle = 10;
+    
+    subplot(7, 3, (iterScale-1)*3+1);
+    box on; axis square; hold on;
+    for ii = 1 : size(newIlluminance,2)
+        rescaledFig2 = plot(SToWls(S),newIlluminance(:,ii),'k');
+        rescaledFig2.Color(4)=0.2;
     end
-    if subjectNumber == 1
-        save2pdf(['Figure6.pdf'],gcf,600);
-    end
-        save2pdf(['PsychometricFunctions/Experiment6/Exp6_',subjectNames{subjectNumber},'.pdf'],gcf,600);
-    close;
+    ylim([0 2]);
+    yticks([0 0.5 1 1.5 2]);
+    yticklabels({'0.0' '0.5' '1.0' '1.5' '2.0'});
+    xlabel('Wavelength (nm)','FontSize',FS);
+    ylabel('Normalized Irradiance','FontSize',FS)
+    set(gca,'FontSize',FS);
+    axis square;
+    title(['\delta = ', num2str(delta_values(iterScale))]);
+    
+    subplot(7, 3, (iterScale-1)*3+2);
+    hold on; box on;
+    %     plot(IlluminantxyYGranada(1,:),IlluminantxyYGranada(2,:),'k.');
+    plot([1:100],sort(IlluminantxyY(3,:)),'r.','MarkerSize',10);
+    xlabel('sorted index','FontSize',FS);
+    ylabel('CIE Y chromaticity','FontSize',FS);
+    %     xlim([0.15, 0.55]);
+    ylim([15, 30]);
+    set(gca,'FontSize',FS);
+    axis square;
+    title(['\delta = ', num2str(delta_values(iterScale))]);
+    
+    subplot(7, 3, (iterScale-1)*3+3);
+    image(theIlluminationImage);
+    set(gca,'FontSize',FS);
+    axis square;
+    %     axis off;
+    box on;
+    title(['\delta = ', num2str(delta_values(iterScale))]);
 end
 
+save2pdf('Figure6.pdf', gcf, 300);

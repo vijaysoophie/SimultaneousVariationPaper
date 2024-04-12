@@ -1,89 +1,71 @@
-% This script plots Figure 11 for Simultaneous Constancy (Experiment 8).
+% This script plots Figure 9 for log threshold for Experiment 7.
 %
-% In this figure we plot log threshold squared of the mean observer for the
-% six conditions studied in Experiment 8. The data is then fit by the 
-% Linear Receptive Field (Linear RF) model. The figure is
-% saved in the folder LightnessConstancy/AnalyzeExperiment8/Figures as 
+% In this figure we plot log threshold squared vs log sigma squared for the
+% mean observer. The data is then fit by Signal Detection Theory (SDT) 
+% model and the Linear Receptive Field (Linear RF) model. The figure is
+% saved in the folder LightnessConstancy/AnalyzeExperiment6/Figures as 
 % Figure5.pdf.
 %
 % Unknown date: Vijay Singh wrote this.
 % May 02, 2021: Vijay Singh modified and added comments.
 % Aug 15, 2021: Vijay Singh changed name to Figure5.
-% Apr 27 2023: Vijay Singh modified this from equivalnet noise paper script.
-% May 17 2023: Vijay Singh modified this added Simultaneous Constancy paper folder.
+% Apr 27 2023: Vijay Singh modified this from equivalent noise paper script.
+% May 17 2023: Vijay Singh moved this to Simultaneous Constancy folder.
 %
 %%
 
-clear; close all;
+clear; % close all;
 %% Load .csv file
-dataFile = importfileForFigure11('../ObserverData/Experiment8/subjectThreshold.csv');
-dataString = table2array(dataFile);
-for iRow = 1:8
-    for iCol = 1:18
-        data(iRow, iCol) = str2num(dataString(iRow, iCol+1));
-    end
-end
+dataFile = importfileForFigure11('../ObserverData/Experiment7/subjectThreshold.csv');
+data = table2array(dataFile);
 
 %% Get the covariance scales and subject thresholds
+covScale = [eps data(4:end,1)']'; % Covariance scales used for plotting. eps is used for covariance scale zero for calculations.
+covScaleForMarkers = [0.000001 data(4:end,1)']'; % Zero covariance scale is replaced by 0.000001 for plotting.
 
-ThresholdSubject0003 = data(2:end, 1:3)';
-ThresholdSubjectBagel = data(2:end, 4:6)';
-ThresholdSubjectFun = data(2:end, 7:9)';
-ThresholdSubjectOven = data(2:end, 10:12)';
-ThresholdSubjectManos = data(2:end, 13:15)';
-ThresholdSubjectRevival = data(2:end, 16:18)';
+nCovScalarsPlot = 100; % Number of points used in plot for the smooth curves.
+covScalarsPlot = linspace(covScaleForMarkers(1),covScaleForMarkers(end),nCovScalarsPlot);
+
+ThresholdSubject0003 = data(3:end, 2:4)';
+ThresholdSubjectBagel = data(3:end, 5:7)';
+ThresholdSubjectContent = data(3:end, 8:10)';
+ThresholdSubjectOven = data(3:end, 11:13)';
+ThresholdSubjectPrimary = data(3:end, 14:16)';
+ThresholdSubjectRevival = data(3:end, 17:19)';
 
 ThresholdMeanSubject = [ThresholdSubject0003; ThresholdSubjectBagel; ...
-    ThresholdSubjectFun; ThresholdSubjectOven; ...
-    ThresholdSubjectManos; ThresholdSubjectRevival];
+    ThresholdSubjectContent; % ThresholdSubjectOven; ...
+    ThresholdSubjectPrimary; ThresholdSubjectRevival];
 
 %% Model covariance scales and thresholds
-ModelThresholds = [0.0257    0.0421    0.0360    0.0658    0.0354    0.0618]; %decision noise 19118 surround value -0.1006
-ModelThresholdStd = [0.0013    0.0025    0.0023    0.0027    0.0009    0.0020]; %decision noise 19118 surround value -0.1006
+covScaleModel = [eps 0.05 0.10 0.15 0.2 0.25 0.3]';
+covScaleModelForMarkers = [0.000001  0.05 0.10 0.15 0.2 0.25 0.3]';
+% Model thresholds obtained through simulations. The 
+% estimateModelThresholds.m file in the folder ModelThreshold was used to
+% obtain these values.
 
+ModelThresholds = [0.0272    0.0278    0.0289    0.0298    0.0347    0.0372    0.0436]; %decision noise 18981 surround value -0.2057
+ModelThresholdSTD = [0.0014    0.0018    0.0016    0.0023    0.0016    0.0010    0.0023]; %decision noise 18981 surround value -0.2057
 %% Plot thresholds
 figure;
 hold on; box on;
-% 1    "No Var Select"
-% 2    "No Var "
-% 3    "Light Var"
-% 4    "Bkg Var"
-% 5    "Lig Bkg Var"
-% 6    "Bkg Var Gray"
-% 7    "Lig Bkg Var Gray"
-
-colorIndex  = [2 3 4 5];
-xColorValue = [1 3 2 4];
-grayIndex   = [6 7];
-xGrayValue  = [2.1 4.1];
-
-errorbar(xColorValue, mean((log10(ThresholdMeanSubject(:,colorIndex).^2))), std(log10(ThresholdMeanSubject(:,colorIndex).^2))/sqrt(size(ThresholdMeanSubject,1)),'ro','MarkerFaceColor', [1 0.3 0.3],'MarkerSize',10,'LineWidth',2, 'color', [1 0.3 0.3]);
-errorbar(xGrayValue, mean((log10(ThresholdMeanSubject(:,grayIndex).^2))), std(log10(ThresholdMeanSubject(:,grayIndex).^2))/sqrt(size(ThresholdMeanSubject,1)),'D','MarkerFaceColor', [0.5 0.5 0.5], 'MarkerEdgeColor', [0.5 0.5 0.5], 'MarkerSize',10,'LineWidth',2, 'color', [0.5 0.5 0.5]);
-
-errorbar(xColorValue-0.05, log10(ModelThresholds(colorIndex-1).^2), ...
-    log10((ModelThresholds(colorIndex-1)+ModelThresholdStd(colorIndex-1)).^2) - log10(ModelThresholds(colorIndex-1).^2), ...
-    'bs','MarkerFaceColor','b','MarkerSize',8,'LineWidth', 1.5);
-errorbar(xGrayValue+0.05, log10(ModelThresholds(grayIndex-1).^2), ...
-    log10((ModelThresholds(grayIndex-1)+ModelThresholdStd(grayIndex-1)).^2) - log10(ModelThresholds(grayIndex-1).^2), ...
-    'bs','MarkerFaceColor','b','MarkerSize',8,'LineWidth', 1.5);
+errorbar(covScaleForMarkers-0.0025,mean((log10(ThresholdMeanSubject.^2))), std(log10(ThresholdMeanSubject.^2))/sqrt(size(ThresholdMeanSubject,1)),'o','MarkerFaceColor', [1 0.3 0.3],'MarkerSize',10,'LineWidth',2, 'color', [1 0.3 0.3]);
+errorbar(covScaleModelForMarkers+0.0025,log10(ModelThresholds.^2),log10((ModelThresholds-ModelThresholdSTD).^2) - log10(ModelThresholds.^2),'bs','MarkerFaceColor','b','MarkerSize',10,'LineWidth',2);
 
 %%
-lFitLabel{1} = 'Chromatic Background';
-lFitLabel{2} = 'Achromatic Background';
-lFitLabel{3} = ['LINRF Model'];
+lFitLabel{1} = 'Light Variation Achromatic Background';
+
 % Threshold for computational observer
 hold on; box on;
+lFitLabel{2} = ['LINRF $\{\sigma_{in}, \sigma_{ex}\} = \{0.028, 0.052\}$'];
 
-
-legend(lFitLabel,'interpreter','latex','location','southeast');
+legend(lFitLabel,'interpreter','latex','location','northwest');
 set(gca, 'Fontsize',20);
-xlabel('Type of Variation');
+xlabel('\delta');
 ylabel('$\left<\log_{10}(T^2)\right> \pm \rm{SEM}$', 'interpreter', 'latex');
-xlim([0.6 4.5]);
-ylim([-3.35 -2.3]);
-xticks([1:4]);
-xticklabels({'None', 'Background', 'Light', 'Simultaneous'});
+xlim([-0.02 0.32]);
+ylim([-3.35 -2.6]);
+xticks([0:0.05:0.3]);
 
-save2pdf('Figure11.pdf', gcf, 600);
-close;
-
+% save2pdf('Figure11.pdf', gcf, 600);
+% close;

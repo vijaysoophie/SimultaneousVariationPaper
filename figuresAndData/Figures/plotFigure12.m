@@ -1,108 +1,116 @@
-% This script plots threshold for Experiment 8.
+% This script plots figure 10 (psychometric function) for Experiment 8.
+% The script requires Palamedes_1.9.0 toolbox. 
 %
-% In this figure we plot log threshold squared for the six conditions
-% studied in Experiement 8. We also plot the increase in thresholds from
-% the no variation condition and compare this when two sources of
-% variations are presented together.
+% The figure is saved in the folder 
+% LightnessConstancy/AnalyzeExperiment6/Figures as Figure4.pdf.
 %
-% Apr 30 2023: Vijay Singh wrote this.
+% Aug 14 2021: Vijay Singh wrote this.
+% Aug 15 2021: Vijay Singh modified this to change names.
+% Apr 27 2023: Vijay Singh modified this from equivalnet noise paper script.
 % May 17 2023: Vijay Singh modified this added Simultaneous Constancy paper folder.
 %
 %%
-
 clear; close all;
-%% Load .csv file
-dataFile = importfileForFigure11('../ObserverData/Experiment8/subjectThreshold.csv');
-dataString = table2array(dataFile);
-for iRow = 1:8
-    for iCol = 1:18
-        data(iRow, iCol) = str2num(dataString(iRow, iCol+1));
+makeDataForFigure12;
+
+conditionOrder = [1 2 4 6 3 5 7];
+conditionName = {'No Variation \newline   Practice';... % Condition Order 1
+             'No Variation';                     ... % Condition Order 2
+             'Backgroung Variation \newline          Chromatic';... % Condition Order 6
+             'Backgroung Variation \newline         Achromatic';... % Condition Order 5
+             'Light Intensity \newline    Variation';... % Condition Order 4
+             'Simultaneous Variation \newline         Chromatic';... % Condition Order 3
+             'Simultaneous Variation \newline        Achromatic'};   % Condition Order 7}
+
+subplotNumber = [1, 5, 6, 2, 7, 8, 4];
+         
+NConditions = 7;
+NAcquisition = 3;
+%% Plot Figure
+hFig = figure();
+set(hFig,'units','pixels', 'Position', [100 100 1000 400]);
+
+for rowSubplot = 1
+    for colSubplot = 1:NConditions
+        subplot(2, 4, subplotNumber(colSubplot))
+        hold on; box on;
+        %% Plot a vertical line indicating the standard
+        lStdY = plot([LRFLevels(6) LRFLevels(6)], yLimits,':r','LineWidth', 1);
+
+        covNumber = conditionOrder(colSubplot);
+        subjectNumber = rowSubplot;
+        for iterAcquisition = 1:NAcquisition
+            acquisitionNumber = iterAcquisition;
+            indexToplot(iterAcquisition) = (subjectNumber-1)*NConditions*NAcquisition + (covNumber - 1)*NAcquisition + acquisitionNumber + 1;       
+        end
+        
+        %% Plot Data 
+        
+        % Plot proportion comparison
+        lData1 = plot(LRFLevels,data(2:end,indexToplot(1))./totalTrial,'r.','MarkerSize',10);
+        lData2 = plot(LRFLevels,data(2:end,indexToplot(2))./totalTrial,'gs','MarkerSize',5, 'MarkerFaceColor', 'g');
+        lData3 = plot(LRFLevels,data(2:end,indexToplot(3))./totalTrial,'b*','MarkerSize',5);
+        
+        % Plot Fit Line
+        lTh1 = plot(xx, yy(:, indexToplot(1)),'r', 'LineWidth', 1);
+        lTh2 = plot(xx, yy(:, indexToplot(2)),'g', 'LineWidth', 1);
+        lTh3 = plot(xx, yy(:, indexToplot(3)),'b', 'LineWidth', 1);
+
+        %% Make Figure Pretty
+        % Set Limits
+        xlim(xLimits);
+        ylim(yLimits);
+        xticks(LRFLevels);
+        hAxis = gca;
+        set(hAxis,'FontSize',10);
+        hAxis.XTickLabelRotation = 90;
+
+        % Subplot Title
+        if (colSubplot == 1)
+            switch rowSubplot
+                case 1
+                    text(0.29, -1, 'Observer: 0003', 'Fontsize', 20, 'rotation', 90);
+            end
+        end        
+        
+        % Subplot x-Label
+        if (colSubplot == 2 || colSubplot == 3 || colSubplot == 5 || colSubplot == 6)
+            xlabel('Comparison LRF', 'Fontsize', 10);
+        end
+        
+        % Subplot y-Label
+        if (colSubplot == 1 || colSubplot == 2)
+            ylabel('Proportion Chosen', 'Fontsize', 10);
+        end
+
+        % Subplot legend
+        legend([lData1 lData2 lData3],{num2str(threshPal(indexToplot(1)),2), ...
+            num2str(threshPal(indexToplot(2)),2), num2str(threshPal(indexToplot(3)),2)},...
+            'Location','Southeast','FontSize',10);
+        
+        % Subplot Title
+        if (rowSubplot == 1)
+            switch colSubplot
+                case 1
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+                case 2
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+                case 3
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+                case 4
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+                case 5
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+                case 6
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+                case 7
+                    title(conditionName(colSubplot), 'Fontsize', 10);
+            end
+        end
+        
     end
 end
 
-%% Get the covariance scales and subject thresholds
 
-ThresholdSubject0003 = data(2:end, 1:3)';
-ThresholdSubjectBagel = data(2:end, 4:6)';
-ThresholdSubjectFun = data(2:end, 7:9)';
-ThresholdSubjectOven = data(2:end, 10:12)';
-ThresholdSubjectManos = data(2:end, 13:15)';
-ThresholdSubjectRevival = data(2:end, 16:18)';
-
-ThresholdMeanSubject = [ThresholdSubject0003; ThresholdSubjectBagel; ...
-    ThresholdSubjectFun; ThresholdSubjectOven; ...
-    ThresholdSubjectManos; ThresholdSubjectRevival];
-
-MeanThresholdSquared = mean(((ThresholdMeanSubject.^2)));
-StdThresholdSquared = std(((ThresholdMeanSubject.^2)));
-
-%% Plot thresholds
-fig = figure;
-set(fig, 'Position', [100 100 800 500]);
-
-hold on; box on;
-% 1    "No Var Select"
-% 2    "No Var "
-% 3    "Light Var"
-% 4    "Bkg Var"
-% 5    "Lig Bkg Var"
-% 6    "Bkg Var Gray"
-% 7    "Lig Bkg Var Gray"
-
-colorIndex  = [2 3 4 5];
-xColorValue = [1 3 1.9 4.1];
-grayIndex   = [6 7];
-xGrayValue  = [2.1 5.1];
-
-% Plot no variation baseline
-plot([0 6], MeanThresholdSquared(2)*[1 1], 'b:', 'LineWidth', 2);
-
-% Plot background variation above baseline
-plot([1.9 1.9], [MeanThresholdSquared(2) MeanThresholdSquared(4)], 'color', [1 0.3 0.3], 'LineWidth', 20);
-plot([2.1 2.1], [MeanThresholdSquared(2) MeanThresholdSquared(6)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
-
-
-% Plot light variation above baseline
-plot([3 3], [MeanThresholdSquared(2) MeanThresholdSquared(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
-
-% Plot sum of individual variation above baseline
-plot([3.9 3.9], [MeanThresholdSquared(2) MeanThresholdSquared(4)+MeanThresholdSquared(3)-MeanThresholdSquared(2)], 'color', [1 0.3 0.3], 'LineWidth', 20);
-plot([4.9 4.9], [MeanThresholdSquared(2) MeanThresholdSquared(6)+MeanThresholdSquared(3)-MeanThresholdSquared(2)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
-
-% Show the part that corresponds to light variation
-plot([3.9 3.9], [MeanThresholdSquared(2) MeanThresholdSquared(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
-plot([4.9 4.9], [MeanThresholdSquared(2) MeanThresholdSquared(3)], 'color', [0.3 0.3 1], 'LineWidth', 20);
-
-% Show the combined variation
-bColor = plot([4.1 4.1], [MeanThresholdSquared(2) MeanThresholdSquared(5)], 'color', [1 0.3 0.3], 'LineWidth', 20);
-bGray = plot([5.1 5.1], [MeanThresholdSquared(2) MeanThresholdSquared(7)], 'color', [0.5 0.5 0.5], 'LineWidth', 20);
-
-
-% Show the error bars
-errorbar(xColorValue, mean(((ThresholdMeanSubject(:,colorIndex)).^2)), std((ThresholdMeanSubject(:,colorIndex)).^2)/sqrt(size(ThresholdMeanSubject,1)),'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
-errorbar(xGrayValue, mean(((ThresholdMeanSubject(:,grayIndex)).^2)), std((ThresholdMeanSubject(:,grayIndex)).^2)/sqrt(size(ThresholdMeanSubject,1)),'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
-
-errorbar([3.9 4.9], [MeanThresholdSquared(4)+MeanThresholdSquared(3)-MeanThresholdSquared(2) ...
-    MeanThresholdSquared(6)+MeanThresholdSquared(3)-MeanThresholdSquared(2)], ...
-    [sqrt(sum(StdThresholdSquared([2 3 4]).^2)/18) sqrt(sum(StdThresholdSquared([2 3 6]).^2)/18)], ...
-    'ko','MarkerFaceColor','k','MarkerSize',10,'LineWidth',2);
-
-%%
-lFitLabel{1} = 'Chromatic Background';
-lFitLabel{2} = 'Achromatic Background';
-% Threshold for computational observer
-hold on; box on;
-
-
-legend([bColor bGray],lFitLabel,'interpreter','latex','location','northwest');
-set(gca, 'Fontsize',20);
-xlabel('Type of Variation');
-ylabel('$\left<T^2\right> \pm \rm{SEM} $ ', 'interpreter', 'latex');
-xlim([0.6 5.5]);
-% ylim([-3.2 -2.1]);
-xticks([1:5]);
-xticklabels({'None', 'Background', 'Light', 'Simultaneous \newline Chromatic', 'Simultaneous \newline Achromatic',});
-
-save2pdf('Figure12.pdf', gcf, 600);
-close;
-
+% save2pdf('Figure12.pdf',gcf,600);
+% close;
